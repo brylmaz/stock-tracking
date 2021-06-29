@@ -49,4 +49,49 @@ class AuthController extends Controller
             ),200);
         }
     }
+
+
+    public function login(Request $request)
+    {
+        $request->validate(array(
+            'email'=>'required|string|email',
+            'password'=>'required|string',
+            'remember_me'=>'required|string|email',
+        ));
+
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return response()->json(array(
+                'message'=>'Giriş bilgileri hatalı'
+            ),401);
+        }else{
+            $user = $request->user();
+            $tokenResult = $user->createToken('Personel Access Token');
+            $token = $tokenResult->token;
+            if ($request->remember_me) {
+                $token->expires_at = Carbon::now()->addWeeks(1);
+            }
+            $token->save();
+            return response()->json(array(
+                'success'=>true,
+                'id'=> $user->id,
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'access_token'=>$tokenResult->accessToken
+            ),200);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json(array(
+            'message' => 'Çıkış yapıldı'
+        ),200);
+    }
+
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
 }
