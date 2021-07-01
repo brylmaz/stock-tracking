@@ -12,15 +12,15 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // kullanıcı adını gönderiyor mu?  email gönderiyor mu? 
-        // users da o email var mı? 
+        // kullanıcı adını gönderiyor mu?  email gönderiyor mu?
+        // users da o email var mı?
         // NOT : confirmed : şifre tekrarı gönderiyor mu doğru mu?
         $request->validate(array(
                 'name'=>'required|string',
                 'email'=>'required|string|email|unique:users',
                 'password'=>'required|string|confirmed'
             ));
-        
+
         // Yeni bir kullanıcı oluşturduk save() ile kaydettik
         $user = new User(array(
             'name'=>$request->name,
@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password'=>md5($request->password)
         ));
         $user = $user->save();
-        
+
         //kullanıcıya giriş yaptırdık
         $credentails = array(
             'email'=>$request->email,
