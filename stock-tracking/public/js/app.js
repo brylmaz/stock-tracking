@@ -2204,11 +2204,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 var Register = function Register() {
-  var handleSubmit = function handleSubmit() {
+  var handleSubmit = function handleSubmit(values) {
     axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/auth/register', _objectSpread({}, values)).then(function (res) {
-      console.log(res);
+      if (res.data.success) {
+        var userData = {
+          id: res.data.id,
+          name: res.data.name,
+          email: res.data.email,
+          access_token: res.data.access_token
+        };
+        var appState = {
+          isLoggedIn: true,
+          user: userData
+        };
+      } else {
+        alert('Giriş Yapamadınız');
+      }
     })["catch"](function (error) {
-      console.log / error;
+      console.log(error);
     });
   };
 
