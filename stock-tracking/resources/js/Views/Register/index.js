@@ -1,11 +1,13 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-const Register = () => {
+import { inject, observer } from 'mobx-react';
+const Register = (props) => {
 
     const [errors,setErrors] = useState([])
+    const [error,setError] = useState('')
     const handleSubmit = (values) => {
         axios.post('/api/auth/register', { ...values })
             .then((res) => {
@@ -20,8 +22,10 @@ const Register = () => {
                         isLoggedIn:true,
                         user:userData
                     };
+                    props.AuthStore.saveToken(appState);
+                    props.history.push('/');
                     alert('Kayıt Tamamlandı')
-                    
+
 
                 }
                 else {
@@ -36,10 +40,11 @@ const Register = () => {
                 }
                 else if (error.request){
                     let err = error.request;
-                    alert(err);
+                    setError(err);
                 }
                 else{
-                    alert(error.message);
+                    setError(error.message);
+                    
                 }
             });
     }
@@ -54,6 +59,7 @@ const Register = () => {
                 <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
                 <h1 class="h3 mb-3 font-weight-normal">Hemen Kayıt Ol</h1>
                 { arr.length !=0 && arr.map((item) =>( <p>{item}</p> )) }
+                { error !='' && ( <p>{error}</p> ) }
                 <Formik
                     initialValues={{
                         name: '',
@@ -125,5 +131,5 @@ const Register = () => {
         </div>
     )
 };
-export default Register;
+export default inject("AuthStore")(observer(Register));
 

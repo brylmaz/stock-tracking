@@ -2280,6 +2280,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! yup */ "./node_modules/yup/es/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var mobx_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mobx-react */ "./node_modules/mobx-react/dist/mobxreact.esm.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
@@ -2307,11 +2308,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var Register = function Register() {
-  var _useState = useState([]),
+
+var Register = function Register(props) {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
       errors = _useState2[0],
       setErrors = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      error = _useState4[0],
+      setError = _useState4[1];
 
   var handleSubmit = function handleSubmit(values) {
     axios__WEBPACK_IMPORTED_MODULE_3___default().post('/api/auth/register', _objectSpread({}, values)).then(function (res) {
@@ -2326,6 +2333,8 @@ var Register = function Register() {
           isLoggedIn: true,
           user: userData
         };
+        props.AuthStore.saveToken(appState);
+        props.history.push('/');
         alert('Kayıt Tamamlandı');
       } else {
         alert('Giriş Yapamadınız');
@@ -2336,9 +2345,9 @@ var Register = function Register() {
         setErrors(err.errors);
       } else if (error.request) {
         var _err = error.request;
-        alert(_err);
+        setError(_err);
       } else {
-        alert(error.message);
+        setError(error.message);
       }
     });
   };
@@ -2368,6 +2377,8 @@ var Register = function Register() {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           children: item
         });
+      }), error != '' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+        children: error
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(formik__WEBPACK_IMPORTED_MODULE_1__.Formik, {
         initialValues: {
           name: '',
@@ -2478,7 +2489,7 @@ var Register = function Register() {
   });
 };
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Register);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,mobx_react__WEBPACK_IMPORTED_MODULE_6__.inject)("AuthStore")((0,mobx_react__WEBPACK_IMPORTED_MODULE_6__.observer)(Register)));
 
 /***/ }),
 
