@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-const Register = () => {
+import { inject, observer } from 'mobx-react';
+const Register = (props) => {
 
     const handleSubmit = (values) => {
         axios.post('/api/auth/register', { ...values })
@@ -19,8 +20,10 @@ const Register = () => {
                         isLoggedIn:true,
                         user:userData
                     };
+                    props.AuthStore.saveToken(appState);
+                    props.history.push('/');
                     alert('Kayıt Tamamlandı')
-                    
+
 
                 }
                 else {
@@ -117,5 +120,5 @@ const Register = () => {
         </div>
     )
 };
-export default Register;
+export default inject("AuthStore")(observer(Register));
 
