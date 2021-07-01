@@ -19,6 +19,8 @@ const Register = () => {
                         isLoggedIn:true,
                         user:userData
                     };
+                    alert('Kayıt Tamamlandı')
+                    
 
                 }
                 else {
@@ -26,7 +28,17 @@ const Register = () => {
                 }
             })
             .catch(error => {
-                console.log(error)
+                if(error.response){
+                    let err = error.response.data;
+                    alert(err.message);
+                }
+                else if (error.request){
+                    let err = error.request;
+                    alert(err);
+                }
+                else{
+                    alert(error.message);
+                }
             });
     }
     return (

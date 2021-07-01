@@ -54,7 +54,9 @@ class AuthController extends Controller
                 'id'=>$user->id,
                 'name'=>$user->name,
                 'email'=>$user->email,
-                'access_token'=>$user->accessToken
+                'access_token'=>$tokenResult->accessToken,
+                'token_type'=>'Bearer',
+                'expires_at'=>Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
             ),201);
         }
     }
