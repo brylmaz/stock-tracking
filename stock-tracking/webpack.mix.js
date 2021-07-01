@@ -11,8 +11,17 @@ const mix = require('laravel-mix');
  |
  */
 
+
+module.exports = {
+    resolve:{
+        fallback:{
+            "crypto":false
+        }
+    }
+}
+
 mix.js('resources/js/app.js', 'public/js')
-.react()    
+.react()
 .postCss('resources/css/app.css', 'public/css', [
         //
     ]);
