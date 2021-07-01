@@ -2217,11 +2217,20 @@ var Register = function Register() {
           isLoggedIn: true,
           user: userData
         };
+        alert('Kayıt Tamamlandı');
       } else {
         alert('Giriş Yapamadınız');
       }
     })["catch"](function (error) {
-      console.log(error);
+      if (error.response) {
+        var err = error.response.data;
+        alert(err.message);
+      } else if (error.request) {
+        var _err = error.request;
+        alert(_err);
+      } else {
+        alert(error.message);
+      }
     });
   };
 
