@@ -2,10 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 const Register = () => {
 
     const handleSubmit = () => {
-        alert('Tıklandı');
+        axios.post('/api/auth/register', {...values}).then((res)=> {
+            console.log(res);
+        })
+        .catch(error => {
+            console.log/(error)
+        })
     }
     return (
         <div style={{ maxWidth: 330, textAlign: 'center' }} className=" justify-content-center">
