@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 const Register = () => {
 
+    const [errors,setErrors] = useState([])
     const handleSubmit = (values) => {
         axios.post('/api/auth/register', { ...values })
             .then((res) => {
@@ -30,7 +31,8 @@ const Register = () => {
             .catch(error => {
                 if(error.response){
                     let err = error.response.data;
-                    alert(err.message);
+                    setErrors(err.errors);
+                    
                 }
                 else if (error.request){
                     let err = error.request;
@@ -41,11 +43,17 @@ const Register = () => {
                 }
             });
     }
+    let arr = [];
+    Object.values(errors).forEach(value => {
+        arr.push(value)
+    });
+
     return (
         <div style={{ maxWidth: 330, textAlign: 'center' }} className=" justify-content-center">
             <div class="form-signin">
                 <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
                 <h1 class="h3 mb-3 font-weight-normal">Hemen Kayıt Ol</h1>
+                { arr.length !=0 && arr.map((item) =>( <p>{item}</p> )) }
                 <Formik
                     initialValues={{
                         name: '',
