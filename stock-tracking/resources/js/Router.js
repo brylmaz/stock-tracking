@@ -1,6 +1,6 @@
 import React from 'react';
 import {Route , Switch} from 'react-router-dom';
-
+import PrivateRoute from './PrivateRoute';
 //Sayfalar
 
 import IndexPage from './Views/Index';
@@ -9,7 +9,7 @@ import RegisterPage from './Views/Register';
 
 const Main =() => (
     <Switch>
-        <Route exact path="/" component={IndexPage}/>
+        <PrivateRoute exact path="/" component={IndexPage}/>
         <Route path="/login" component={LoginPage}/>
         <Route path="/register" component={RegisterPage}/>
     </Switch>

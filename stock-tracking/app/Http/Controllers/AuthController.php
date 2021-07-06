@@ -62,47 +62,59 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request)
-    {
-        $request->validate(array(
+    public function login(Request $request){
+        $request->validate([
             'email'=>'required|string|email',
             'password'=>'required|string',
-            'remember_me'=>'required|string|email',
-        ));
+            'remember_me'=>'boolean'
+        ]);
+        $credentials = request(['email','password']);
 
-        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return response()->json(array(
-                'message'=>'Giriş bilgileri hatalı'
-            ),401);
-        }else{
-            $user = $request->user();
-            $tokenResult = $user->createToken('Personel Access Token');
-            $token = $tokenResult->token;
-            if ($request->remember_me) {
-                $token->expires_at = Carbon::now()->addWeeks(1);
-            }
-            $token->save();
-            return response()->json(array(
-                'success'=>true,
-                'id'=> $user->id,
-                'name'=>$user->name,
-                'email'=>$user->email,
-                'access_token'=>$tokenResult->accessToken
-            ),200);
+        if(!Auth::attempt($credentials)){
+            return response()->json([
+                'message'=>'Bilgiler Hatalı Kontrol Ediniz'
+            ],401);
         }
+
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        if($request->remember_me){
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
+        return response()->json([
+            'success'=>true,
+            'id'=>$user->id,
+            'name'=>$user->name,
+            'email'=>$user->email,
+            'access_token'=>$tokenResult->accessToken,
+            'token_type'=>'Bearer',
+            'expires_at'=>Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
+        ],201);
     }
 
-    public function logout(Request $request)
-    {
+    public function logout(Request $request){
         $request->user()->token()->revoke();
-        return response()->json(array(
-            'message' => 'Çıkış yapıldı'
-        ),200);
+        return response()->json([
+            'message'=>'Çıkış Yapıldı'
+        ]);
     }
 
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+    
+    public function authenticate(Request $request){
+        $user = [];
+        if(Auth::check()){
+            $user = $request->user();
+        }
+        return response()->json([
+            'user' => $user,
+            'isLoggedIn' => Auth::check()
+        ]);
     }
 
 }

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -6,8 +6,17 @@ import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 const Register = (props) => {
 
-    const [errors,setErrors] = useState([])
-    const [error,setError] = useState('')
+    const [errors,setErrors] = useState([]);
+    const [error,setError] = useState('');
+    
+    useEffect(() => {
+        if(props.AuthStore.appState != null){
+          if(props.AuthStore.appState.isLoggedIn){
+            return props.history.push('/');
+          }
+        }
+      });
+    
     const handleSubmit = (values) => {
         axios.post('/api/auth/register', { ...values })
             .then((res) => {
@@ -24,12 +33,12 @@ const Register = (props) => {
                     };
                     props.AuthStore.saveToken(appState);
                     props.history.push('/');
-                    alert('Kayıt Tamamlandı')
+                    alert('Kayıt Tamamlandı');
 
 
                 }
                 else {
-                    alert('Giriş Yapamadınız')
+                    alert('Giriş Yapamadınız');
                 }
             })
             .catch(error => {
@@ -55,9 +64,9 @@ const Register = (props) => {
 
     return (
         <div style={{ maxWidth: 330, textAlign: 'center' }} className=" justify-content-center">
-            <div class="form-signin">
-                <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
-                <h1 class="h3 mb-3 font-weight-normal">Hemen Kayıt Ol</h1>
+            <div className="form-signin">
+                <img className="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72" />
+                <h1 className="h3 mb-3 font-weight-normal">Hemen Kayıt Ol</h1>
                 { arr.length !=0 && arr.map((item) =>( <p>{item}</p> )) }
                 { error !='' && ( <p>{error}</p> ) }
                 <Formik
@@ -100,33 +109,33 @@ const Register = (props) => {
 
                         <div>
                             <div className="form-group">
-                                <label for="inputEmail" class="sr-only">Ad Soyad</label>
-                                <input type="text" name="name" class="form-control" placeholder="Ad Soyad" value={values.name} onChange={handleChange('name')} onBlur={handleBlur} />
+                                <label htmlFor="inputEmail" className="sr-only">Ad Soyad</label>
+                                <input type="text" name="name" className="form-control" placeholder="Ad Soyad" value={values.name} onChange={handleChange('name')} onBlur={handleBlur} />
                                 {(errors.name && touched.name) && <p>{errors.name}</p>}
                             </div>
                             <div className="form-group">
-                                <label for="inputEmail" class="sr-only">Email adres</label>
-                                <input type="email" class="form-control" placeholder="Email adres" value={values.email} onChange={handleChange('email')} />
+                                <label htmlFor="inputEmail" className="sr-only">Email adres</label>
+                                <input type="email" className="form-control" placeholder="Email adres" value={values.email} onChange={handleChange('email')} />
                                 {(errors.email && touched.email) && <p>{errors.email}</p>}
                             </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="sr-only">Şifre</label>
-                                <input type="password" class="form-control" placeholder="Şifre" value={values.password} onChange={handleChange('password')} />
+                            <div className="form-group">
+                                <label htmlFor="inputPassword" className="sr-only">Şifre</label>
+                                <input type="password" className="form-control" placeholder="Şifre" value={values.password} onChange={handleChange('password')} />
                                 {(errors.password && touched.password) && <p>{errors.password}</p>}
                             </div>
-                            <div class="form-group">
-                                <label for="inputPassword" class="sr-only">Şifre Tekrarı</label>
-                                <input type="password" class="form-control" placeholder="Şifre Tekrarı" value={values.password_confirmation} onChange={handleChange('password_confirmation')} />
+                            <div className="form-group">
+                                <label htmlFor="inputPassword" className="sr-only">Şifre Tekrarı</label>
+                                <input type="password" className="form-control" placeholder="Şifre Tekrarı" value={values.password_confirmation} onChange={handleChange('password_confirmation')} />
                                 {(errors.password_confirmation && touched.password_confirmation) && <p>{errors.password_confirmation}</p>}
                             </div>
 
 
-                            <button class="btn btn-lg btn-primary btn-block" type="button" onClick={handleSubmit} disabled={!isValid || isSubmitting}>Kayıt Ol</button>
+                            <button className="btn btn-lg btn-primary btn-block" type="button" onClick={handleSubmit} disabled={!isValid || isSubmitting}>Kayıt Ol</button>
                         </div>
                     )}
                 </Formik>
                 <Link className="mt-3" style={{ display: "block" }} to="/login">Giriş Yap</Link>
-                <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+                <p className="mt-5 mb-3 text-muted">© 2017-2018</p>
             </div>
         </div>
     )

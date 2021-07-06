@@ -19,6 +19,11 @@ Route::group([
     Route::post('login',[\App\Http\Controllers\AuthController::class,'login']);
     Route::post('register',[\App\Http\Controllers\AuthController::class,'register']);
 });
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::group([
+    'middleware' => ['auth:api']
+],function(){
+    Route::post('/logout',[\App\Http\Controllers\AuthController::class,'logout']);
+    Route::post('/authenticate',[\App\Http\Controllers\AuthController::class,'authenticate']);
 });
