@@ -2005,9 +2005,9 @@ var Layout = function Layout(props) {
   }, []);
 
   var logout = function logout() {
-    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/logout', {}, {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post("/api/logout", {}, {
       headers: {
-        Autohorization: 'Bearer ' + props.AuthStore.appState.user.access_token
+        Authorization: 'Bearer ' + props.AuthStore.appState.user.access_token
       }
     }).then(function (res) {
       return console.log(res);

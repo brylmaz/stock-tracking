@@ -29,17 +29,13 @@ const Layout = (props) => {
 
     const logout = () => {
         
-        axios.post('/api/logout',{},
-        {
-            headers:
-            {
-                Autohorization:'Bearer ' + props.AuthStore.appState.user.access_token
+        axios.post(`/api/logout`,{},{
+            headers:{
+                Authorization: 'Bearer '+ props.AuthStore.appState.user.access_token
             }
-        })
-        .then(res => console.log(res)).catch(e=>console.log(e));
+        }).then(res => console.log(res)).catch(e => console.log(e));
         props.AuthStore.removeToken();
         history.push('/login');
-        
     }
     
     return (
